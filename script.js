@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 function submitForm(event) {
   event.preventDefault(); // Prevent form submission
 
@@ -28,7 +30,7 @@ function submitForm(event) {
 // Send form data to OpenAI API
 function sendToOpenAI(formData) {
   // Replace 'YOUR_API_KEY' with your actual OpenAI API key
-  var apiKey = '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';
+  var apiKey = process.env.API_KEY;
 
   // Replace 'YOUR_MODEL_ID' with the model ID you want to use
   var modelId = 'gpt-3.5-turbo';
