@@ -1,22 +1,23 @@
-function submitForm(event) {
-  event.preventDefault(); // Prevent form submission
-  
+function submitForm() {
   // Get the form element
   var form = document.getElementById("wheelForm");
-  
+
   // Access the form data
   var formData = new FormData(form);
-  
+
   // Display the form data in the console
   for (var pair of formData.entries()) {
     console.log(pair[0] + ": " + pair[1]);
   }
-  
+
   // You can perform additional processing or send the form data to a server here
-  
+
   // Clear the form fields
   form.reset();
+
+  return false; // Prevent form submission
 }
+
 
 
 // Handle form submission
