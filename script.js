@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 function submitForm(event) {
   event.preventDefault(); // Prevent form submission
 
@@ -18,8 +16,8 @@ function submitForm(event) {
   // Display the form data in the console
   console.log(jsonData);
 
-  // Send form data to OpenAI API
-  sendToOpenAI(jsonData);
+  // Send form data to your server's API endpoint
+  sendToServer(jsonData);
 
   // Clear the form fields
   form.reset();
@@ -27,34 +25,13 @@ function submitForm(event) {
   return false; // Prevent form submission
 }
 
-// Send form data to OpenAI API
-function sendToOpenAI(formData) {
-  // Replace 'YOUR_API_KEY' with your actual OpenAI API key
-  var apiKey = process.env.API_KEY;
-
-  // Replace 'YOUR_MODEL_ID' with the model ID you want to use
-  var modelId = 'gpt-3.5-turbo';
-
-  // Define the OpenAI API endpoint
-  var apiUrl = 'https://api.openai.com/v1/engines/' + modelId + '/completions';
-
-  // Prepare the data to send
-  var requestData = {
-    prompt: 'The submitted form data is: ' + JSON.stringify(formData),
-    max_tokens: 50
-  };
-
-  // Make the API request
+// Send form data to your server's API endpoint
+function sendToServer(formData) {
   axios
-    .post(apiUrl, requestData, {
-      headers: {
-        'Authorization': 'Bearer ' + apiKey,
-        'Content-Type': 'application/json'
-      }
-    })
+    .post('/api/openai', formData)
     .then(function(response) {
-      // Handle the API response
-      console.log('OpenAI response:', response.data.choices[0].text);
+      // Handle the API response from your server
+      console.log('Server response:', response.data);
     })
     .catch(function(error) {
       // Handle errors
