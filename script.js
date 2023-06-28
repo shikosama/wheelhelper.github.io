@@ -1,16 +1,23 @@
-function submitForm() {
+function submitForm(event) {
+  event.preventDefault(); // Prevent form submission
+
   // Get the form element
   var form = document.getElementById("wheelForm");
 
   // Access the form data
   var formData = new FormData(form);
 
-  // Display the form data in the console
+  // Convert form data to JSON
+  var jsonData = {};
   for (var pair of formData.entries()) {
-    console.log(pair[0] + ": " + pair[1]);
+    jsonData[pair[0]] = pair[1];
   }
 
-  // You can perform additional processing or send the form data to a server here
+  // Display the form data in the console
+  console.log(jsonData);
+
+  // Send form data to OpenAI API
+  sendToOpenAI(jsonData);
 
   // Clear the form fields
   form.reset();
@@ -18,43 +25,39 @@ function submitForm() {
   return false; // Prevent form submission
 }
 
+// Send form data to OpenAI API
+function sendToOpenAI(formData) {
+  // Replace 'YOUR_API_KEY' with your actual OpenAI API key
+  var apiKey = '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';
 
+  // Replace 'YOUR_MODEL_ID' with the model ID you want to use
+  var modelId = 'gpt-3.5-turbo';
 
-// Handle form submission
-function handleSubmit(event) {
-    event.preventDefault(); // Prevent form submission
-    const formData = new FormData(form); // Get form data
+  // Define the OpenAI API endpoint
+  var apiUrl = 'https://api.openai.com/v1/engines/' + modelId + '/completions';
 
-    // Create an object to store the wheel data
-    const wheelData = {};
+  // Prepare the data to send
+  var requestData = {
+    prompt: 'The submitted form data is: ' + JSON.stringify(formData),
+    max_tokens: 50
+  };
 
-    // Iterate over the form data and store the values in the wheelData object
-    for (const [key, value] of formData.entries()) {
-        wheelData[key] = value;
-    }
-
-    // Call the function to process the wheel data
-    processWheelData(wheelData);
-}
-
-// Function to process the wheel data
-function processWheelData(wheelData) {
-    // Display the suggested numbers in the result container
-    const resultContainer = document.getElementById('resultContainer');
-    resultContainer.style.display = 'block';
-
-    let suggestedNumbers = '';
-    for (const key in wheelData) {
-        const value = wheelData[key];
-        if (key.includes('_number')) {
-            suggestedNumbers += value + ', ';
-        }
-    }
-    suggestedNumbers = suggestedNumbers.slice(0, -2); // Remove the trailing comma and space
-
-    console.log('Wheel Data:', wheelData); // Debug statement
-
-    resultContainer.textContent = 'Suggested Numbers: ' + suggestedNumbers;
+  // Make the API request
+  axios
+    .post(apiUrl, requestData, {
+      headers: {
+        'Authorization': 'Bearer ' + apiKey,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(function(response) {
+      // Handle the API response
+      console.log('OpenAI response:', response.data.choices[0].text);
+    })
+    .catch(function(error) {
+      // Handle errors
+      console.error('Error:', error);
+    });
 }
 
 // Debugging statements
