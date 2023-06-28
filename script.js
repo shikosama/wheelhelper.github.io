@@ -1,4 +1,3 @@
-require('dotenv').config();
 
 function submitForm(event) {
   event.preventDefault(); // Prevent form submission
