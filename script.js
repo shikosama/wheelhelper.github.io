@@ -30,7 +30,7 @@ function submitForm(event) {
 // Send form data to OpenAI API
 function sendToOpenAI(formData) {
   // Retrieve the API key from the environment variable
-  var apiKey = process.env.API_KEY;
+  var apiKey = window.API_KEY;
 
   // Replace 'YOUR_MODEL_ID' with the model ID you want to use
   var modelId = 'gpt-3.5-turbo';
